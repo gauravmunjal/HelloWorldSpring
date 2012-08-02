@@ -15,15 +15,65 @@ public class AppConfig {
         dataSource.setUsername("postgres");
         dataSource.setPassword("crossword");
         JdbcTemplate db = new JdbcTemplate(dataSource);
-        db.update("DROP TABLE USERS;");
-        db.update("CREATE TABLE USERS (" +
-                    "id SERIAL," +
-                    "PRIMARY KEY(id)," +
-                    "name varchar(30) NOT NULL," +
-                    "email varchar(30) NOT NULL," +
-                    "username varchar(30) NOT NULL," +
-                    "password varchar(30) NOT NULL" +
-                    ");");
+        try {
+            int a =  db.queryForInt("SELECT COUNT(*) FROM USERS;");
+        }
+        catch (Exception e) {
+            //TODO:Remove Sysout
+            System.out.print(e.toString());
+            db.update("CREATE TABLE USERS (" +
+                        "id SERIAL," +
+                        "PRIMARY KEY(id)," +
+                        "name varchar(30) NOT NULL," +
+                        "email varchar(30) NOT NULL," +
+                        "username varchar(30) NOT NULL," +
+                        "password varchar(30) NOT NULL" +
+                        ");");
+        }
+        try {
+            int a =  db.queryForInt("SELECT COUNT(*) FROM TWEETS;");
+        }
+        catch (Exception e) {
+            //TODO:Remove Sysout
+            System.out.print(e.toString());
+            db.update("CREATE TABLE TWEETS (" +
+                        "id SERIAL," +
+                        "PRIMARY KEY(id)," +
+                        "userID INTEGER," +
+                        "tweet varchar(30) NOT NULL," +
+                        "username varchar(30) NOT NULL," +
+                        "pushtime  timestamp DEFAULT current_timestamp" +
+                        ");");
+        }
+
+        try {
+            int a =  db.queryForInt("SELECT COUNT(*) FROM FOLLOWS;");
+        }
+        catch (Exception e) {
+            //TODO:Remove Sysout
+            System.out.print(e.toString());
+            db.update("CREATE TABLE FOLLOWS (" +
+                        "followerID INTEGER," +
+                        "followingID INTEGER" +
+                        ");");
+        }
+
+        try {
+            int a =  db.queryForInt("SELECT COUNT(*) FROM FEED;");
+        }
+        catch (Exception e) {
+            //TODO:Remove Sysout
+            System.out.print(e.toString());
+            db.update("CREATE TABLE FEED (" +
+                        "userID INTEGER," +
+                        "tweetID INTEGER" +
+                        ");");
+        }
         return db;
+    }
+
+    @Bean
+    public ThreadLocal<Integer> userID() {
+        return new ThreadLocal<Integer>();
     }
 }

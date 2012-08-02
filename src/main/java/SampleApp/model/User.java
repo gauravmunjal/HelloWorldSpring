@@ -1,5 +1,10 @@
 package SampleApp.model;
 
+import org.springframework.jdbc.core.RowMapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: gauravmunjal
@@ -8,9 +13,30 @@ package SampleApp.model;
  * To change this template use File | Settings | File Templates.
  */
 public class User {
+
+    private int id;
     private String name;
     private String email;
     private String username;
+    private String password;
+
+    public static final RowMapper<User> rowMapper = new RowMapper<User>() {
+        @Override public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            return new User(resultSet);
+        }
+    };
+
+    public User() {
+
+    }
+
+    public User(ResultSet resultSet) throws SQLException {
+        id = resultSet.getInt("id");
+        name = resultSet.getString("name");
+        email = resultSet.getString("email");
+        username = resultSet.getString("username");
+        password = resultSet.getString("password");
+    }
 
     public String getName() {
         return name;
@@ -44,7 +70,15 @@ public class User {
         this.password = password;
     }
 
-    private String password;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
 
 }

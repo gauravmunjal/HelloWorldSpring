@@ -6,7 +6,9 @@
     <title>WooHoo</title>
 </head>
 <body>
-Hello World! ${name}
+<h1>Hello! ${user.name}</h1>
+<h2>@${user.username}</h2>
+<h2>${user.email}</h2>
 </body>
 
 </html>
